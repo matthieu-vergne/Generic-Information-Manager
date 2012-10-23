@@ -40,8 +40,11 @@ public class ConceptContainer {
 
 		owner = systemFactory.makeProperty("You");
 		ownerFactory = new ConceptFactory(this, owner);
-		addConcept(owner);
-		addConcept(systemFactory.makeProperty("Owner"));
+		
+		Property ownerType = systemFactory.makeProperty("Owner");
+		systemFactory.makeIsInstanceOfRelation(owner, ownerType);
+		Property single = systemFactory.makeProperty("1");
+		systemFactory.makeRelation(ownerType, single, "has exact number of instances of");
 	}
 
 	public void addConcept(Concept concept) {

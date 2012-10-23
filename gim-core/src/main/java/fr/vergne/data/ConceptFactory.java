@@ -73,4 +73,10 @@ public class ConceptFactory {
 		relation.setRepresentation("was created on");
 		return relation;
 	}
+
+	public Relation makeIsInstanceOfRelation(Concept instance, Concept type) {
+		Relation relation = makeRelation(instance, type);
+		relation.setRepresentation("is instance of");
+		return relation;
+	}
 }
