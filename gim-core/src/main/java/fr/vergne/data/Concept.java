@@ -1,67 +1,24 @@
 package fr.vergne.data;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+public abstract class Concept {
 
-import fr.vergne.data.property.DateProperty;
-import fr.vergne.data.relation.IsCreatedOnRelation;
-import fr.vergne.data.relation.IsRepresentedByRelation;
-import fr.vergne.data.relation.Relation;
-import fr.vergne.util.ClassSearcherIterator;
-import fr.vergne.util.Misc;
+	private Object representation;
 
-public class Concept {
-
-	private final Set<Relation<?, ?>> relations = new LinkedHashSet<Relation<?, ?>>();
-	static private final Set<Concept> concepts = new LinkedHashSet<Concept>();
-
-	public Concept() {
-		concepts.add(this);
-		if (this instanceof IsCreatedOnRelation) {
-			// do not create such relation (infinite loop)
-		} else {
-			addRelation(new IsCreatedOnRelation(this, new DateProperty()));
-		}
+	public Object getRepresentation() {
+		return representation;
 	}
 
-	public static Set<Concept> getAllConcepts() {
-		return concepts;
+	public void setRepresentation(Object representation) {
+		this.representation = representation;
 	}
 
-	public static <T extends Concept> Set<T> getConcepts(Class<T> conceptClass) {
-		Set<T> concepts = new HashSet<T>();
-		ClassSearcherIterator<T> iterator = new ClassSearcherIterator<T>(
-				getAllConcepts(), conceptClass);
-		while (iterator.hasNext()) {
-			concepts.add(iterator.next());
-		}
-		return concepts;
+	public boolean hasRepresentation() {
+		return representation != null;
 	}
 
-	public void addRelation(Relation<?, ?> relation) {
-		if (relation.getStart() == this || relation.getEnd() == this) {
-			relations.add(relation);
-		} else {
-			throw new RuntimeException(
-					"The relation is not related to this concept.");
-		}
-	}
-
-	public Set<Relation<?, ?>> getRelations() {
-		return relations;
-	}
-
-	public String getRepresentation() {
-		ClassSearcherIterator<IsRepresentedByRelation> iterator = new ClassSearcherIterator<IsRepresentedByRelation>(
-				getRelations(), IsRepresentedByRelation.class);
-		IsRepresentedByRelation representation = iterator.next();
-		if (representation != null) {
-			return representation.getEnd().get();
-		} else if (Misc.getMethodRecursivityDepth() > 0) {
-			return "";
-		} else {
-			return toString();
-		}
+	@Override
+	public String toString() {
+		return (hasRepresentation() ? getRepresentation().toString() : "")
+				+ "[" + hashCode() + "]";
 	}
 }
