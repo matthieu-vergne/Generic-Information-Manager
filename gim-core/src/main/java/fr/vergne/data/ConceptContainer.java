@@ -34,8 +34,8 @@ public class ConceptContainer {
 		addConcept(system);
 		systemFactory = new ConceptFactory(this, system);
 		systemFactory.setDecorationsActivated(false);
-		systemFactory.makeCreatorRelation(system, system);
-		systemFactory.makeCreationDateRelation(system, new Date());
+		systemFactory.makeWasCreatedByRelation(system, system);
+		systemFactory.makeWasCreatedOnRelation(system, new Date());
 		systemFactory.setDecorationsActivated(true);
 
 		owner = systemFactory.makeProperty("You");

@@ -27,8 +27,8 @@ public class ConceptFactory {
 			ConceptFactory systemFactory = container.getSystemConceptFactory();
 			boolean old = systemFactory.getDecorationsActivated();
 			systemFactory.setDecorationsActivated(false);
-			systemFactory.makeCreatorRelation(concept, creator);
-			systemFactory.makeCreationDateRelation(concept, new Date());
+			systemFactory.makeWasCreatedByRelation(concept, creator);
+			systemFactory.makeWasCreatedOnRelation(concept, new Date());
 			systemFactory.setDecorationsActivated(old);
 		} else {
 			// do not put decorations
@@ -62,13 +62,13 @@ public class ConceptFactory {
 		return relation;
 	}
 
-	public Relation makeCreatorRelation(Concept created, Concept creator) {
+	public Relation makeWasCreatedByRelation(Concept created, Concept creator) {
 		Relation relation = makeRelation(created, creator);
 		relation.setRepresentation("was created by");
 		return relation;
 	}
 
-	public Relation makeCreationDateRelation(Concept created, Date date) {
+	public Relation makeWasCreatedOnRelation(Concept created, Date date) {
 		Relation relation = makeRelation(created, makeProperty(date));
 		relation.setRepresentation("was created on");
 		return relation;
