@@ -30,6 +30,7 @@ public class ConceptContainer {
 
 	public ConceptContainer() {
 		system = new Property();
+		system.setRepresentation("System");
 		addConcept(system);
 		systemFactory = new ConceptFactory(this, system);
 		systemFactory.setDecorationsActivated(false);
