@@ -11,7 +11,7 @@ public class Relation extends Concept {
 
 	public void setStart(Concept start) {
 		if (start == null) {
-			throw new RuntimeException("You must give a start element");
+			throw new NullPointerException("You must give a start element");
 		} else {
 			this.start = start;
 		}
@@ -23,7 +23,7 @@ public class Relation extends Concept {
 
 	public void setEnd(Concept end) {
 		if (end == null) {
-			throw new RuntimeException("You must give an end element");
+			throw new NullPointerException("You must give an end element");
 		} else {
 			this.end = end;
 		}
