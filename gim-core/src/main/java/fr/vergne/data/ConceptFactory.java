@@ -63,20 +63,14 @@ public class ConceptFactory {
 	}
 
 	public Relation makeWasCreatedByRelation(Concept created, Concept creator) {
-		Relation relation = makeRelation(created, creator);
-		relation.setRepresentation("was created by");
-		return relation;
+		return makeRelation(created, creator, "was created by");
 	}
 
 	public Relation makeWasCreatedOnRelation(Concept created, Date date) {
-		Relation relation = makeRelation(created, makeProperty(date));
-		relation.setRepresentation("was created on");
-		return relation;
+		return makeRelation(created, makeProperty(date), "was created on");
 	}
 
 	public Relation makeIsInstanceOfRelation(Concept instance, Concept type) {
-		Relation relation = makeRelation(instance, type);
-		relation.setRepresentation("is instance of");
-		return relation;
+		return makeRelation(instance, type, "is instance of");
 	}
 }
