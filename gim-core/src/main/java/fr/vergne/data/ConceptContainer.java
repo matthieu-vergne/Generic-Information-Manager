@@ -1,27 +1,12 @@
 package fr.vergne.data;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class ConceptContainer {
 
-	private final Set<Concept> concepts = new TreeSet<Concept>(
-			new Comparator<Concept>() {
-				@Override
-				public int compare(Concept c1, Concept c2) {
-					int comparison = c1.toString().compareTo(c2.toString());
-					if (comparison == 0 && c1 != c2) {
-						comparison = 1;
-					} else if (comparison != 0 && c1 == c2) {
-						throw new IllegalStateException(
-								"This case should not happen");
-					} else {
-						// the computation corresponds
-					}
-					return comparison;
-				}
-			});
+	private final Set<Concept> concepts = new HashSet<Concept>();
 	private final Property system;
 	private final Property owner;
 	private final ConceptFactory systemFactory;
