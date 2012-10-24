@@ -1,6 +1,5 @@
 package fr.vergne.data;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,24 +26,58 @@ public class ConceptContainer {
 	private final Property owner;
 	private final ConceptFactory systemFactory;
 	private final ConceptFactory ownerFactory;
+	private final Property conceptType;
+	private final Property propertyType;
+	private final Property relationType;
+	private final Property wasCreatedByRelationType;
+	private final Property wasCreatedOnRelationType;
+	private final Property isAvailableToRelationType;
 
 	public ConceptContainer() {
 		system = new Property();
-		system.setRepresentation("System");
 		addConcept(system);
 		systemFactory = new ConceptFactory(this, system);
 		systemFactory.setDecorationsActivated(false);
 		systemFactory.makeWasCreatedByRelation(system, system);
 		systemFactory.makeWasCreatedOnRelation(system, new Date());
+		systemFactory.makeIsRepresentedByRelation(system, "system");
 		systemFactory.setDecorationsActivated(true);
 
-		owner = systemFactory.makeProperty("You");
-		ownerFactory = new ConceptFactory(this, owner);
+		conceptType = systemFactory.makeProperty();
+		systemFactory.makeRelation(conceptType, conceptType);
+		systemFactory.makeIsRepresentedByRelation(conceptType, "concept");
+
+		propertyType = systemFactory.makeProperty();
+		systemFactory.makeRelation(propertyType, conceptType);
+		systemFactory.makeIsRepresentedByRelation(propertyType, "property");
+		relationType = systemFactory.makeProperty();
+		systemFactory.makeRelation(relationType, conceptType);
+		systemFactory.makeIsRepresentedByRelation(relationType, "relation");
+
+		wasCreatedByRelationType = systemFactory.makeProperty();
+		systemFactory.makeRelation(wasCreatedByRelationType, relationType);
+		systemFactory.makeIsRepresentedByRelation(wasCreatedByRelationType,
+				"was created by");
+		wasCreatedOnRelationType = systemFactory.makeProperty();
+		systemFactory.makeRelation(wasCreatedOnRelationType, relationType);
+		systemFactory.makeIsRepresentedByRelation(wasCreatedOnRelationType,
+				"was created on");
+		isAvailableToRelationType = systemFactory.makeProperty();
+		systemFactory.makeRelation(isAvailableToRelationType, relationType);
+		systemFactory.makeIsRepresentedByRelation(isAvailableToRelationType,
+				"is available to");
 		
-		Property ownerType = systemFactory.makeProperty("Owner");
-		systemFactory.makeIsInstanceOfRelation(owner, ownerType);
+
+		owner = systemFactory.makeProperty("you");
+		systemFactory.makeIsAvailableToRelation(owner, owner);
+		ownerFactory = new ConceptFactory(this, owner);
+
+		Property ownerType = systemFactory.makeProperty("owner");
+		systemFactory.makeRelation(owner, ownerType);
 		Property single = systemFactory.makeProperty("1");
-		systemFactory.makeRelation(ownerType, single, "has exact number of instances of");
+		systemFactory.makeRelation(ownerType, single);
+		systemFactory.makeIsRepresentedByRelation(wasCreatedByRelationType,
+				"has exact number of instances of");
 	}
 
 	public void addConcept(Concept concept) {
@@ -59,11 +92,11 @@ public class ConceptContainer {
 		return concepts;
 	}
 
-	public Property getSystemConcept() {
+	public Property getSystem() {
 		return system;
 	}
 
-	public Property getOwnerConcept() {
+	public Property getOwner() {
 		return owner;
 	}
 
@@ -73,6 +106,30 @@ public class ConceptContainer {
 
 	public ConceptFactory getOwnerConceptFactory() {
 		return ownerFactory;
+	}
+
+	public Property getWasCreatedByRelationType() {
+		return wasCreatedByRelationType;
+	}
+
+	public Property getWasCreatedOnRelationType() {
+		return wasCreatedOnRelationType;
+	}
+
+	public Property getRelationType() {
+		return relationType;
+	}
+
+	public Property getPropertyType() {
+		return propertyType;
+	}
+
+	public Property getConceptType() {
+		return conceptType;
+	}
+
+	public Property getIsAvailableToRelationType() {
+		return isAvailableToRelationType;
 	}
 
 }

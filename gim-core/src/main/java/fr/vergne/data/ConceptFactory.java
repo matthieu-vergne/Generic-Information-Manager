@@ -29,6 +29,7 @@ public class ConceptFactory {
 			systemFactory.setDecorationsActivated(false);
 			systemFactory.makeWasCreatedByRelation(concept, creator);
 			systemFactory.makeWasCreatedOnRelation(concept, new Date());
+			systemFactory.makeIsAvailableToRelation(concept, creator);
 			systemFactory.setDecorationsActivated(old);
 		} else {
 			// do not put decorations
@@ -42,8 +43,8 @@ public class ConceptFactory {
 	}
 
 	public Property makeProperty(Object representation) {
-		Property property = makeProperty();
-		property.setRepresentation(representation);
+		Property property = new RepresentationProperty(representation);
+		initConcept(property);
 		return property;
 	}
 
@@ -55,22 +56,27 @@ public class ConceptFactory {
 		return relation;
 	}
 
-	public Relation makeRelation(Concept start, Concept end,
-			Object representation) {
-		Relation relation = makeRelation(start, end);
-		relation.setRepresentation(representation);
+	public Relation makeWasCreatedByRelation(Concept created, Concept creator) {
+		Relation relation = makeRelation(created, creator);
+		makeRelation(relation, container.getWasCreatedByRelationType());
 		return relation;
 	}
 
-	public Relation makeWasCreatedByRelation(Concept created, Concept creator) {
-		return makeRelation(created, creator, "was created by");
+	public Relation makeIsAvailableToRelation(Concept concept, Concept owner) {
+		Relation relation = makeRelation(concept, owner);
+		makeRelation(relation, container.getWasCreatedByRelationType());
+		return relation;
 	}
 
 	public Relation makeWasCreatedOnRelation(Concept created, Date date) {
-		return makeRelation(created, makeProperty(date), "was created on");
+		Relation relation = makeRelation(created, makeProperty(date));
+		makeRelation(relation, container.getWasCreatedOnRelationType());
+		return relation;
 	}
 
-	public Relation makeIsInstanceOfRelation(Concept instance, Concept type) {
-		return makeRelation(instance, type, "is instance of");
+	public Relation makeIsRepresentedByRelation(Concept represented, Object representer) {
+		Relation relation = makeRelation(represented, makeProperty(representer));
+		makeRelation(relation, container.getWasCreatedOnRelationType());
+		return relation;
 	}
 }
